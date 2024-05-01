@@ -1,0 +1,137 @@
+# Chapter 1: Hello World
+
+## Before we begin..
+
+Welcome!
+
+The document you are reading is a "Livebook", a kind of notebook that can be edited and used by multiple people and contain dynamic content like code, charts, buttons, videos and much more.
+
+The facilitator should have demonstrated how to get it running on your computer and the basics of using the tool.
+
+## First steps
+
+It is an ancient tradition amongst programmers that the first program one writes is called "Hello World". That's because all the program does is to print those two words on the screen.
+
+We will do the same as our first exercise.
+
+#### Exercise 1.1:
+
+Click inside the black box below and write "Hello world".
+Then press `Ctrl + Enter` on your keyboard (or `Command + Enter`, if you're on a Mac).
+
+```elixir
+
+```
+
+If you did that correctly, you should see a red notice and an error.
+
+That's because programming languages treat text differently than human languages.
+Anything we type into the black box is assumed to be code instructions. And those two words don't match any existing instructions, so it leads to an error.
+
+#### Exercise 1.2:
+
+Let's instead try to tell the computer that these are in fact just two ordinary words and not a piece of code. We can do that, by wrapping the two words in double quotes (`"`). It should look like this:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+"Hello world"
+```
+
+Try it below and run the code:
+
+```elixir
+
+```
+
+This time there should be no error, instead you should see the same words repeated back at you, now in green text.
+
+## Variables
+
+*TODO: basic interpolation*
+
+#### Exercise 2.1
+
+```elixir
+name = "Grace"
+```
+
+```elixir
+"Hello name"
+```
+
+```elixir
+"Hello #{name}"
+```
+
+## Functions
+
+*TODO: Explain modules, functions*
+
+```elixir
+defmodule Greeter do
+  def greet(name) do
+    "Hello #{name}"
+  end
+end
+```
+
+```elixir
+Greeter.greet("Grace")
+```
+
+Alternative:
+
+```elixir
+defmodule DanishGreeter do
+  def greet(name) do
+    "Hej #{name}"
+  end
+end
+```
+
+```elixir
+DanishGreeter.greet("Grace")
+```
+
+Alternative:
+
+```elixir
+defmodule LanguageGreeter do
+  def greet(name, "Danish") do
+    "Hej #{name}"
+  end
+
+  def greet(name, "French") do
+    "Bonjour #{name}"
+  end
+
+  def greet(name, _language) do
+    "Hello #{name}"
+  end
+end
+```
+
+```elixir
+# LanguageGreeter.greet("Grace", "Danish")
+# LanguageGreeter.greet("Grace", "French")
+# LanguageGreeter.greet("Grace", "German")
+```
+
+*TODO: Function that does something more interesting*
+
+```elixir
+"Hello #{name}, your name is #{String.length(name)} characters long"
+```
+
+```elixir
+defmodule LoudGreeter do
+  def shout(name) do
+    "HELLO #{String.upcase(name)}, CAN YOU HEAR ME?!"
+  end
+end
+```
+
+```elixir
+LoudGreeter.shout(name)
+```
