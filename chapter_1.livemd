@@ -14,21 +14,19 @@ It is an ancient tradition amongst programmers that the first program one writes
 
 We will do the same as our first exercise.
 
-#### Exercise 1.1:
+#### Exercise 1.1: printing Hello World
 
 Click inside the black box below and write "Hello world".
 Then press `Ctrl + Enter` on your keyboard (or `Command + Enter`, if you're on a Mac).
 
 ```elixir
-
+Hello World!
 ```
 
 If you did that correctly, you should see a red notice and an error.
 
 That's because programming languages treat text differently than human languages.
 Anything we type into the black box is assumed to be code instructions. And those two words don't match any existing instructions, so it leads to an error.
-
-#### Exercise 1.2:
 
 Let's instead try to tell the computer that these are in fact just two ordinary words and not a piece of code. We can do that, by wrapping the two words in double quotes (`"`). It should look like this:
 
@@ -48,74 +46,144 @@ This time there should be no error, instead you should see the same words repeat
 
 ## Variables
 
-*TODO: basic interpolation*
-
-#### Exercise 2.1
+Variables in programming are symbolic names associated to values. They are what we use in our programs to refer to values, and all programming languages use this feature.
 
 ```elixir
 name = "Grace"
 ```
 
+Once we set a value for a variable, we can retrieve the value assigned by calling the variable itself:
+
+```elixir
+name
+```
+
+#### Variables within a text
+
+But what if we want to know the variable value along some other text? For example, outputting "Hello Grace" using our `name` variable. How can we achieve this? Wwe have seen in the first exercise that we need to use double quotes ("") in order to tell the computer that we are giving it ordinary text and not code instructions. What happens if you use the variable `name` within double quotes?
+
 ```elixir
 "Hello name"
 ```
+
+This will just treat the word name as regular text, and not as code, therefore outputting "Hello name" instead of our desired "Hello Grace". Elixir has a way to tell the computer that a variable needs to be evaluated instead of treated as part of the text. The variable name can be wrapped inside curly braces preceded by a hashtag symbol: `#{variable name}`.
 
 ```elixir
 "Hello #{name}"
 ```
 
+This way, the output of the instruction will contain the value previously assigned to the variable.
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Exercise 1.2: using variables within a text
+
+Write a small text where you can say your name and age, using variables for the name and the age.
+
+```elixir
+
+```
+
 ## Functions
 
-*TODO: Explain modules, functions*
+In a program where we need to do more that just printing a text with a variable we need a way to structure and group our code instructions. Functions in Elixir are a basic unit that helps us organize a set of instructions together. They work a bit like in math, they take some input, perform one or more instructions and give some output. We use a function to perform a specific task. Functions are opened with the `def` keyword, they have a name that we define, and they open a `do...end` block that wraps our instructions. The function name is generally written in what it is called `snake_case`, which means words connected by underscores:
 
 ```elixir
-defmodule Greeter do
+def my_function_name do
+  "Hello Grace"
+end
+```
+
+Elixir has also another type of function, but we will not talk about it at this point. As you might have noticed if you tried to run the above code, this will error. THis is becasue a function needs to have a home. It needs to be placed inside what we call a `module`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can use `modules` to organize our functions. A module is opened with the `defmodule` keyword, it has a name that we define, and it opens a block `do...end` that wraps our functions. The module name is generally written in what it is called CamelCase, with words chained by each first letter capitalized. A module can contain one or more `functions`.
+
+```elixir
+defmodule MyModuleName do
+  def my_function_name do
+  end
+end
+```
+
+Once we have a function within a module, we could place our previous istruction in the function:
+
+```elixir
+defmodule GraceGreeter do
+  def greet_grace do
+    "Hello Grace"
+  end
+end
+```
+
+How can we print the text after this step? We do that by *calling* the function, using its name. And because the function is placed within the module, we need to tell the computer where the function is located and what it is called. So we call the module name, and chain the function name to it with a dot:
+
+```elixir
+GraceGreeter.greet_grace()
+```
+
+We are however not yet done. How does it work if we want to be able to greet different people than Grace? We can combine the use of a variable that we saw above with our function. How will that look like?
+
+```elixir
+defmodule PersonalGreeter do
+  def greet do
+    "Hello #{name}"
+  end
+end
+```
+
+This gives us an error. Lets try to understand what is going on. The compiler complains that the variable name is undefined. What does this mean? In our previous example, we had given our `name` variable [a value](#cell-gizelkxfyagd42uw). Now, in our new implementation with a module and a function, we are not giving the name variable a value, so the computer does not know what to print for name. How can we give a value to our variable used inside a function? Naturally, we could extend our code and give the variable a value:
+
+```elixir
+defmodule NewGreeter do
+  def greet do
+    name = "Leia"
+    "Hello #{name}"
+  end
+end
+```
+
+But what is the issue with this? You can probably spot the issue if you run this code as we learnt above:
+
+```elixir
+NewGreeter.greet()
+```
+
+What is the issue? We are using a variable, but this variable will always give us the same output. So, how can we use a module and a function to greet different people? We need to somehow be able to give the function the value we want it to use when we run the code. We do this using something called `parameters`. Parameters are used in two places:<br/>
+
+* in the function `definition`:
+
+```elixir
+defmodule SmarterGreeter do
   def greet(name) do
     "Hello #{name}"
   end
 end
 ```
 
+where we define the variable name we are going to use<be/>
+
+* in the function `call`:
+
 ```elixir
-Greeter.greet("Grace")
+SmarterGreeter.greet("Luke")
 ```
 
-Alternative:
+where we tell the computer which value to use for the variable name.
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### Exercise 1.3: functions and modules
+
+Write a module with functions that greet you in english and danish, giving you the following output and taking as inputs the name and the language of the greeting.
 
 ```elixir
-defmodule DanishGreeter do
-  def greet(name) do
-    "Hej #{name}"
-  end
-end
-```
-
-```elixir
-DanishGreeter.greet("Grace")
-```
-
-Alternative:
-
-```elixir
-defmodule LanguageGreeter do
-  def greet(name, "Danish") do
-    "Hej #{name}"
-  end
-
-  def greet(name, "French") do
-    "Bonjour #{name}"
-  end
-
-  def greet(name, _language) do
-    "Hello #{name}"
-  end
-end
+Hej Grace
 ```
 
 ```elixir
-# LanguageGreeter.greet("Grace", "Danish")
-# LanguageGreeter.greet("Grace", "French")
-# LanguageGreeter.greet("Grace", "German")
+Hello Grace
 ```
 
 *TODO: Function that does something more interesting*
