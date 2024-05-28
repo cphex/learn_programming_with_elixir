@@ -1,1 +1,202 @@
-# Chapter 3: Magic
+# Chapter 3: Kino Showcase
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.12.0"},
+  {:vega_lite, "~> 0.1.6"},
+  {:kino_vega_lite, "~> 0.1.10"}
+])
+```
+
+## Warning
+
+You are not expected to understand everything that's going on in this Livebook. It is solely meant to showcase some of what can be done using Elixir, Livebook and programming in general. While reading, try modifying small bits and pieces here and there, and see what changes.
+
+## Introduction
+
+Programming is more than just numbers. In this chapter, we'll take a whirlwind tour through some of the things you can do with Elixir and Livebook.
+
+<!-- livebook:{"branch_parent_index":1} -->
+
+## Inputs and outputs
+
+```elixir
+name = Kino.Input.text("Your name")
+```
+
+```elixir
+IO.puts("Hello, #{Kino.Input.read(name)}!")
+```
+
+## Buttons
+
+```elixir
+button = Kino.Control.button("Click me!")
+```
+
+```elixir
+Kino.listen(button, fn event -> IO.inspect(event) end)
+```
+
+## Images
+
+Let's have some fun. A grayscale image can be defined as a series of values in the range 0-255, prefixed with a header describing the height and width of the image.
+
+```elixir
+height = 256
+width = 256
+
+# greyscale
+greyscale = 1
+
+pixels =
+  for x <- 0..(height - 1), y <- 0..(width - 1), into: <<>>, do: <<Integer.floor_div(x + y, 2)>>
+
+image = <<height::integer-32, width::integer-32, greyscale, pixels::binary>>
+
+Kino.Shorts.image(image, :pixel)
+```
+
+You don't have to understand everything that's going on here (we're using some new constructs,  [comprehensions](https://hexdocs.pm/elixir/comprehensions.html) and [binaries](https://hexdocs.pm/elixir/binaries-strings-and-charlists.html)). The interesting part is the `Integer.floor_div(x + y, 2)` part. Here, `x` and `y` are pixel positions, starting from the top left corner of the image. For instance, when `x` and `y` are both 0, the result of the expression is also 0, meaning that the pixel in the top left corner of the image is completely black. Likewise, when both inputs are 255, the result is 255 which is completely white.
+
+Try playing around with the function. For instance, can you make the gradient vertical instead of diagonal? What happens if you change `+` to `*`?
+
+<!-- livebook:{"break_markdown":true} -->
+
+Let's try with colors
+
+```elixir
+# RGB (Red-Green-Blue)
+rgb = 3
+
+pixels =
+  for x <- 0..(height - 1), y <- 0..(width - 1), into: <<>> do
+    <<
+      # red
+      height - 1 - x,
+      # green
+      width - 1 - y,
+      # blue
+      Integer.floor_div(x + y, 2)
+    >>
+  end
+
+content = <<height::integer-32, width::integer-32, rgb, pixels::binary>>
+
+Kino.Shorts.image(content, :pixel)
+```
+
+## Audio
+
+Let's get started with some audio
+
+```elixir
+defmodule Music do
+  @volume 0.5
+  @output_hz 44100
+  @standard_pitch 440.0
+
+  def pitch(i) do
+    @standard_pitch * 2 ** (i / 12)
+  end
+
+  def num_samples(duration) do
+    ceil(@output_hz * duration)
+  end
+
+  def sample(p, i) do
+    @volume * :math.sin(2 * :math.pi() * i * p / @output_hz)
+  end
+
+  def note(i, duration) do
+    p = pitch(i)
+    n = num_samples(duration)
+    Stream.map(0..(n - 1), &sample(p, &1))
+  end
+
+  def c(duration) do
+    note(3, duration)
+  end
+
+  def d(duration) do
+    note(5, duration)
+  end
+
+  def e(duration) do
+    note(7, duration)
+  end
+
+  def break(duration) do
+    Stream.duplicate(0.0, num_samples(duration))
+  end
+end
+```
+
+```elixir
+alias VegaLite, as: Vl
+
+data =
+  Music.note(3, 2)
+  |> Enum.take(100)
+  |> Enum.with_index()
+  |> Enum.map(fn {y, x} -> %{time: x, sample: y} end)
+  |> Enum.to_list()
+
+Vl.new(width: 400, height: 400)
+|> Vl.data_from_values(data)
+|> Vl.mark(:line)
+|> Vl.encode_field(:x, "time", type: :temporal)
+|> Vl.encode_field(:y, "sample", type: :quantitative)
+```
+
+```elixir
+defmodule Wav do
+  def add_wav_header(data) do
+    bits_per_sample = <<16::little-integer-16>>
+    block_align_unit = <<2::little-integer-16>>
+    sample_rate = 44100
+    data_transmission_rate = <<sample_rate * 2::little-integer-32>>
+    sample_rate = <<sample_rate::little-integer-32>>
+    number_of_channels = <<1::little-integer-16>>
+    format = <<1::little-integer-16>>
+
+    data_chunk = <<"data", byte_size(data)::little-integer-32, data::binary>>
+
+    fmt =
+      <<format::binary, number_of_channels::binary, sample_rate::binary,
+        data_transmission_rate::binary, block_align_unit::binary, bits_per_sample::binary>>
+
+    fmt_chunk = <<"fmt ", byte_size(fmt)::little-integer-32, fmt::binary, data_chunk::binary>>
+
+    wave_chunk = <<"WAVE", fmt_chunk::binary>>
+    <<"RIFF", byte_size(wave_chunk)::little-integer-32, wave_chunk::binary>>
+  end
+
+  def from_samples(samples) do
+    samples
+    |> Stream.map(&round((2 ** 16 - 1) * &1))
+    |> Enum.into(
+      <<>>,
+      fn byte -> <<byte::little-integer-16>> end
+    )
+    |> add_wav_header()
+  end
+end
+```
+
+```elixir
+res =
+  [
+    Music.break(0.1),
+    Music.c(0.4),
+    Music.break(0.1),
+    Music.d(0.4),
+    Music.break(0.1),
+    Music.e(0.4),
+    Music.break(0.1),
+    Music.c(0.4)
+  ]
+  |> Enum.concat()
+  |> Wav.from_samples()
+  |> Kino.Shorts.audio(:wav)
+```

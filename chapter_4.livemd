@@ -1,1 +1,8 @@
 # Chapter 4: Where to go from here?
+
+## What now?
+
+* Learn more about Elixir [here](https://elixir-lang.org).
+* Learn more about Livebook [here](https://livebook.dev/).
+* Take Elixir courses on Exercism [here](https://exercism.org/tracks/elixir).
+* Develop web applications using [Phoenix](https://hexdocs.pm/phoenix)
