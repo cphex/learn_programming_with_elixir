@@ -1,1 +1,68 @@
 # Chapter 2: Collections
+
+## Collections
+
+A collection is in programming a single unit that groups multiple values together. Elixir has different types of collections, one of the simplest being called `List`. A list is indicated by square brackets `[]`.
+
+```elixir
+["lemon", "peach", "cherry"]
+```
+
+A list can be associated to a variable, just like a piece of text:
+
+```elixir
+fruits = ["lemon", "peach", "cherry"]
+```
+
+In the same way as for the text, calling the variable name will return you the full list:
+
+```elixir
+fruits
+```
+
+You can easily add or subtract elements from lists using the `++` and `--` *operators*:
+
+```elixir
+["lemon", "peach", "cherry"] ++ ["ananas"]
+```
+
+```elixir
+["lemon", "peach", "cherry", "ananas"] -- ["ananas"]
+```
+
+What happens if you try to subtract an element that does not exist? Try that out!
+
+```elixir
+
+```
+
+## Lists functions
+
+As we saw in the previous chapter bonus exercise, the Elixir language itself offers you predefined functions that you can use to work with lists. Among the simplest functions are the ones to give you the first or last element in a list.<br >
+If we take our `fruits` list from above, we can get the first element out of it with the following code:
+
+```elixir
+List.first(fruits)
+```
+
+This might seem confusing, but if you look back at what you learned in Chapter 1, you should be able to see what is going on in that piece of code:<br>
+
+* `List` is a `module`, like the custom module we created earlier
+* `first` is a `function`. A predefined, built-in function inside the `List` module
+* `fruits` is the variable where you put your list, and you are passing it to the function when *calling* it<br>
+
+Just as we did earlier!
+
+## Exercise 2.1: getting the last element of a list
+
+Give the list of fruits that we defined [above](http://localhost:49654/sessions/ndb7ciz7jsm65doqatpni46qpirqwquq6hb4unehxaagn4kd#cell-6ctlojjvuewkuw2p) can you get the following output out of it?
+
+```elixir
+"Cherry"
+```
+
+Try it out here
+
+```elixir
+[1..100]
+```
