@@ -16,8 +16,9 @@ We will do the same as our first exercise.
 
 #### Exercise 1.1: printing Hello World
 
-Click inside the black box below and write "Hello world".
-Then press `Ctrl + Enter` on your keyboard (or `Command + Enter`, if you're on a Mac).
+Click inside the black box below and type `Hello world!`.
+
+Then press the keys `Ctrl + Enter` (on Windows) or `Command + Enter` (on Mac) to run the program.
 
 ```elixir
 Hello World!
@@ -28,13 +29,7 @@ If you did that correctly, you should see a red notice and an error.
 That's because programming languages treat text differently than human languages.
 Anything we type into the black box is assumed to be code instructions. And those two words don't match any existing instructions, so it leads to an error.
 
-Let's instead try to tell the computer that these are in fact just two ordinary words and not a piece of code. We can do that, by wrapping the two words in double quotes (`"`). It should look like this:
-
-<!-- livebook:{"force_markdown":true} -->
-
-```elixir
-"Hello world"
-```
+Let's instead try to tell the computer that these are in fact just two ordinary words and not a piece of code. We can do that, by wrapping the two words in double quotes (`"`).
 
 Try it below and run the code:
 
@@ -46,33 +41,57 @@ This time there should be no error, instead you should see the same words repeat
 
 ## Variables
 
-Variables in programming are symbolic names associated to values. They are what we use in our programs to refer to values, and all programming languages use this feature.
+So we know how to type text that the computer can work with. Let's learn how to reuse our text.
+
+We can use a concept called "variables", which exists in all programming languages.
+*(You might remember that word from math class, where they serve a similar purpose.)*
+
+You can think of variables as containers or boxes, that can store other things. Things like text, numbers, images, or almost anything else. By putting a thing in labeled box, we make it easier to find and reuse later.
+
+Say we want to store the name of our user in a variable, so we can greet them when they run our program.
+
+To create a variable, we first have to come up with a good label for it. In this case, `name` seems pretty approriate for storing someones name!  
+*(Note how `name` is not in quotes because it is a variable and not a piece of text!)*
+
+After the label, we add a `=` (equals symbol), followed by the thing we want to store. In this case it is the name of our user, `"Grace"`.
+
+So by using an equal symbol, we are telling the computer that these two things are *equivalent*, ie. they refer to the same thing. So the next time it sees `name`, it will look it up in its memory and gives us the content inside, which is `"Grace"`.
+
+Here's how that looks:
 
 ```elixir
 name = "Grace"
 ```
 
-Once we set a value for a variable, we can retrieve the value assigned by calling the variable itself:
+Once we set a value for a variable, we can get the stored contents back by calling the variable itself. Click inside the code block below and press `Ctrl+Enter` to run it.
 
 ```elixir
 name
 ```
 
-#### Variables within a text
+#### Mixing text and variables
 
-But what if we want to know the variable value along some other text? For example, outputting "Hello Grace" using our `name` variable. How can we achieve this? Wwe have seen in the first exercise that we need to use double quotes ("") in order to tell the computer that we are giving it ordinary text and not code instructions. What happens if you use the variable `name` within double quotes?
+Now we know how to store and access the name. But what if we want to combine some text with a variable?
+
+For example, outputting "Hello Grace" using our `name` variable. How can we achieve this?
+
+We saw in the first exercise that we need to use double quotes (`""`) to tell the computer that we are giving it ordinary text and not code instructions. What happens if you use the variable `name` within double quotes? Try it out below.
 
 ```elixir
 "Hello name"
 ```
 
-This will just treat the word name as regular text, and not as code, therefore outputting "Hello name" instead of our desired "Hello Grace". Elixir has a way to tell the computer that a variable needs to be evaluated instead of treated as part of the text. The variable name can be wrapped inside curly braces preceded by a hashtag symbol: `#{variable name}`.
+This will just treat the word `name` as regular text, and not as code, therefore outputting "Hello name" instead of our desired "Hello Grace".
+
+Elixir has a way to tell the computer that a variable needs to be replaced instead of treated as part of the text. The variable name can be wrapped inside curly braces preceded by a hashtag symbol: `#{variable}`.
+
+Try to run the example below:
 
 ```elixir
 "Hello #{name}"
 ```
 
-This way, the output of the instruction will contain the value previously assigned to the variable.
+This way, the output contains the original text and the variable placeholder has been replaced by the contents. In this case it is "Grace", but it could also have been "Peter" or "Ben" or whatever we decided to put inside the variable when we created it.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -86,7 +105,25 @@ Write a small text where you can say your name and age, using variables for the 
 
 ## Functions
 
-In a program where we need to do more that just printing a text with a variable we need a way to structure and group our code instructions. Functions in Elixir are a basic unit that helps us organize a set of instructions together. They work a bit like in math, they take some input, perform one or more instructions and give some output. We use a function to perform a specific task. Functions are opened with the `def` keyword, they have a name that we define, and they open a `do...end` block that wraps our instructions. The function name is generally written in what it is called `snake_case`, which means words connected by underscores:
+We would like to make programs that can do more than just printing text. To do that we need a way to structure and organize our code.
+
+Functions in Elixir are a basic concept that helps us group a set of instructions together.
+
+They work similarly to functions in math: they take some input, do something with the input, and return an ouput.
+
+We will create and use one function for each action that we want our program to do.
+
+Functions are defined with the `def` keyword (short for *define*), it is shown in purple in the code box.
+
+Functions have a unique name that allows us to identify and reuse them, shown in blue.
+
+The name of the function is generally written in what is called `snake_case`, which means words connected by underscores. (So "My beautiful function" would usually be written as `my_beautiful_function`)
+
+Right after the name we chose, we write the word `do`, to indiciate that anything that follows is what the function should *do*.
+
+Then we can define any instructions on the next lines.
+
+Once we are done, we use the word `end` to indicate that we have reached the end of the function and no more work should be done.
 
 ```elixir
 def my_function_name do
@@ -94,11 +131,15 @@ def my_function_name do
 end
 ```
 
-Elixir has also another type of function, but we will not talk about it at this point. As you might have noticed if you tried to run the above code, this will error. THis is becasue a function needs to have a home. It needs to be placed inside what we call a `module`.
+Elixir has also another type of function, but we will not talk about it at this point. As you might have noticed if you tried to run the above code, this will error. That's because a function needs to have a home. It needs to be placed inside what we call a *module*.
 
 <!-- livebook:{"break_markdown":true} -->
 
-We can use `modules` to organize our functions. A module is opened with the `defmodule` keyword, it has a name that we define, and it opens a block `do...end` that wraps our functions. The module name is generally written in what it is called CamelCase, with words chained by each first letter capitalized. A module can contain one or more `functions`.
+We can use modules to organize our functions. A module can contain one or more functions.
+
+A module is opened with the `defmodule` keyword, followed by a name of our choosing, and then a `do...end` block containing our actual function.
+
+The module name is generally written in what it is called "CamelCase", meaning no spaces and the first letter of each word capitalized. (So "My beautiful module" would usually be written as `MyBeatifulModule`)
 
 ```elixir
 defmodule MyModuleName do
@@ -179,14 +220,18 @@ where we tell the computer which value to use for the variable name.
 Write a module with functions that greet you in english and danish, giving you the following output and taking as inputs the name and the language of the greeting.
 
 ```elixir
-Hej Grace
+"Hej Grace"
 ```
 
 ```elixir
-Hello Grace
+"Hello Grace"
 ```
 
 *TODO: Function that does something more interesting*
+
+## Bonus
+
+Calling built-in functions
 
 ```elixir
 "Hello #{name}, your name is #{String.length(name)} characters long"
