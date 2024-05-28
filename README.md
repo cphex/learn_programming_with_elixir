@@ -9,17 +9,14 @@ Created collaboratively by members of the Copenhagen Elixir meetup.
 ### Chapter 1: Hello World
 
 Covers: Hello World, strings, variables, functions
-Status: WIP
 
-### Chapter 2: Collections (?)
+### Chapter 2: Collections
 
-Lists, fortune teller
-Status: WIP
+Lists
 
-### Chapter 3: Data and visuals (?)
+### Chapter 3: Data and visuals
 
 Kino, Vega, and more.
-Status: WIP
 
 ## Setup
 
