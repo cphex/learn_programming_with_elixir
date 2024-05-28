@@ -64,5 +64,5 @@ Give the list of fruits that we defined [above](http://localhost:49654/sessions/
 Try it out here
 
 ```elixir
-[1..100]
+
 ```
