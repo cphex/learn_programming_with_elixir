@@ -7,4 +7,5 @@
 * Take "lessons" on Elixir School [here](https://elixirschool.com).
 * Take Elixir courses on Exercism [here](https://exercism.org/tracks/elixir).
 * Develop web applications using [Phoenix](https://hexdocs.pm/phoenix).
-* Read about Elixir in [Elixir in Action](https://www.manning.com/books/elixir-in-action)
+* Read about Elixir in [Elixir in Action](https://www.manning.com/books/elixir-in-action).
+* Participate in the community [here](https://elixirforum.com/).
