@@ -18,6 +18,10 @@ proxy:
     roles-claim: "https://shinyproxy.io/shinyproxy_roles"
     logout-url: https://dev-86k35fwjrx0y5mgr.eu.auth0.com/oidc/logout?id_token_hint=#{oidcUser.idToken.tokenValue}&post_logout_redirect_uri=https%3A%2F%2Flivebook.munksgaard.me
 
+  api-security:
+    cors-allowed-origins:
+      - "repo.hex.pm"
+
   admin-groups: admin
 
   container-log-path: ./container-logs
